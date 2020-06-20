@@ -1,16 +1,32 @@
 <launch>
-
+  
 
   <param name="robot_description" command="cat '$(find sbrobot_desc)/urdf/sbrobot.urdf'"/>
 
     <!-- send fake joint values -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <param name="use_gui" value="true"/>
+    <param name="use_gui" value="false"/>
   </node>
- 
+  <node args="-param robot_description -urdf -z 0.00 -y -0.0 -model sbrobot" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
   <!-- Combine joint values -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <rosparam file="$(find sbrobot_desc)/config/controllers.yaml" command="load"/>
+  <rosparam file="$(find sbrobot_desc)/config/pid.yaml" command="load"/>
+  <rosparam command="load" file="$(find sbrobot_desc)/config/joints.yaml"/>
+  <arg name="x_pos" default="-3.0"/>
+  <arg name="y_pos" default="1.0"/>
+  <arg name="z_pos" default="0.0"/>
 
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="left_motor_controller right_motor_controller joint_state_controller"/>
   <node name="rviz" pkg="rviz" type="rviz" />
 
 </launch>
