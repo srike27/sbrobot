@@ -1,0 +1,6 @@
+left_motor_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: left_wheel_hinge
+right_motor_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: right_wheel_hinge
