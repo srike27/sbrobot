@@ -3,7 +3,6 @@
 <robot name="jetPR">
 
   <link name="base_link">
-    <pose>0 0 0 0 0 0</pose>
     <inertial>
       <mass value="5.0"/>
       <origin xyz="0.0 0 0.55" rpy=" 0 0 0"/>
@@ -22,7 +21,31 @@
       </geometry>
     </visual>
   </link>
-  
+
+  <link name="head">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0.0 0.0 0.0" rpy=" 0 0 0"/>
+      <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001"/>
+    </inertial>
+    <collision name='collision'>
+    <origin xyz="0.0 0.0 0.0" rpy=" 0 0 0"/>
+      <geometry>
+        <box size=".1 .1 .1"/>
+      </geometry>
+    </collision> 
+    <visual name='chassis_visual'>
+      <origin xyz="0 0 0" rpy=" 0 0 0"/>
+      <geometry>
+        <box size=".1 .1 .1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="base_footprint">
+    <pose>0 0 0 0 0 0</pose>
+  </link>
+
   <link name="left_wheel">
     <inertial>
       <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
@@ -44,7 +67,6 @@
         <cylinder radius="0.1" length="0.05"/>
       </geometry>
     </visual>
-    
   </link>
   
   <link name="right_wheel">
@@ -69,6 +91,17 @@
       </geometry>
     </visual>
   </link>
+
+  <joint type="fixed" name="dummy_joint">
+    <origin xyz="0 0.0 0" rpy="0 0 0"/>
+    <child link="base_link"/>
+    <parent link="base_footprint"/>
+  </joint>
+  <joint type="fixed" name="head_joint">
+    <origin xyz="0 0.0 0.55" rpy="0 0 0"/>
+    <child link="head"/>
+    <parent link="base_link"/>
+  </joint>
 
   <joint type="continuous" name="left_wheel_hinge">
     <origin xyz="0 0.175 0.1" rpy="0 0 0"/>
@@ -139,5 +172,24 @@
       <material>Gazebo/Black</material>
     </gazebo>
 
-
+  <gazebo reference="head">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>50</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>head</bodyName>
+        <updateRateHZ>50.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>head</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
 </robot>
