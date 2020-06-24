@@ -108,7 +108,7 @@
     <child link="left_wheel"/>
     <parent link="base_link"/>
     <axis xyz="0 1 0" rpy="0 0 0"/>
-    <limit effort="1.5" velocity="1000000"/>
+    <limit effort="1.5" velocity="1000"/>
   <physics><ode><limit>
     <cfm>0.000000</cfm>
     <erp>0.900000</erp>
@@ -121,7 +121,7 @@
     <child link="right_wheel"/>
     <parent link="base_link"/>
     <axis xyz="0 1 0" rpy="0 0 0"/>
-    <limit effort="1.5" velocity="1000000"/>
+    <limit effort="1.5" velocity="1000"/>
   <physics><ode><limit>
     <cfm>0.000000</cfm>
     <erp>0.900000</erp>
@@ -186,7 +186,7 @@
         <gaussianNoise>0.0</gaussianNoise>
         <xyzOffset>0 0 0</xyzOffset>
         <rpyOffset>0 0 0</rpyOffset>
-        <frameName>head</frameName>
+        <frameName>base_link</frameName>
         <initialOrientationAsReference>false</initialOrientationAsReference>
       </plugin>
       <pose>0 0 0 0 0 0</pose>
